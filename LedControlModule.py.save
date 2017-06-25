@@ -1,0 +1,31 @@
+import time
+from neopixel import *
+
+LED_COUNT = 31
+LED_PIN = 18
+LED_FREQ_HZ = 800000
+LED_DMA = 5
+LED_BRIGHTNESS = 200
+LED_INVERT = False
+LED_CHANNEL = 0
+LED_STRIP = ws.WS2811_STRIP_GRB
+
+strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+
+
+def Setup():
+	strip.begin()
+	SwitchOff()
+
+def SwitchOff():
+	strip.setBrightness(0)
+	strip.show()
+
+def SwitchOn():
+.setBrightness(180)
+	strip.setPixelColor(1, Color(255, 0, 0))
+	strip.show()
+
+	time.sleep(2)
+	SwitchOff()
+	 
