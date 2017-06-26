@@ -7,10 +7,10 @@ import math
 from pytz import timezone 
 
 
-MAX_BRIGHTNESS = 220
-DEFAULT_BRIGHTNESS = 80
+MAX_BRIGHTNESS = 190
+DEFAULT_BRIGHTNESS = 30
 # UTC offset
-PEAK_EVENING_TIME = datetime.datetime.today().replace(hour=20, minute=30, second=0)
+PEAK_EVENING_TIME = datetime.datetime.today().replace(hour=21, minute=30, second=0)
 PEAK_MORNING_TIME = datetime.datetime.today().replace(hour=5, minute=0, second=0)
 LOCATION = "Stroud UK"
 
@@ -24,8 +24,8 @@ def GetBrightness():
 	london = timezone("Europe/London")
 
 	brightness = 1
-	sunrise = astro.GetSunrise(LOCATION)
-	sunset = astro.GetSunset(LOCATION)
+	sunrise = astro.GetSunrise(None)
+	sunset = astro.GetSunset(None)
 	now = datetime.datetime.utcnow()	
 	midnight = (datetime.datetime.today() + datetime.timedelta(days=1)).replace(hour=1, minute=0, second=0)
 	
@@ -38,38 +38,36 @@ def GetBrightness():
 	eve_peak_end = PEAK_EVENING_TIME + PEAK_DURATION
 
 #	print midnight
-	print PEAK_EVENING_TIME
+#	print PEAK_EVENING_TIME
 #	print sunrise
 #	print sunset
-	print now
+#	print now
 #	print early_bound_rise
 #	print early_bound_set
-	print early_bound_eve_peak
+#	print early_bound_eve_peak
 #	print early_bound_mor_peak
 
-	if now.time() > sunrise.time() and now < midnight:
-		# Sunset
-		if now.time() >= PEAK_EVENING_TIME.time() and now.time() <= eve_peak_end.time():
- 			return MAX_BRIGHTNESS
-		elif now.time() >= early_bound_eve_peak.time() and now.time() < PEAK_EVENING_TIME.time():
-			# Gradual increase until peak time 
-			diff = PEAK_EVENING_TIME - now
-			newVal = CalculateIncreaseVal(diff.seconds)
-			print diff.seconds
-			return newVal
-		elif now.time() > eve_peak_end.time() and now.time() <= late_bound_eve_peak.time():
-			# Gradual decrease until end of late bound
-			diff = late_bound_eve_peak - now
-			newVal = CalculateDecreaseVal(diff.seconds)
-			print diff.seconds
-			return newVal			
-		else:
-			# All other cases return
-			return DEFAULT_BRIGHTNESS
-		 
+	if now.time() > sunrise.time() and now.time() < early_bound_eve_peak.time():
+		return 0
+	elif  now.time() >= PEAK_EVENING_TIME.time() and now.time() <= eve_peak_end.time():
+ 		return MAX_BRIGHTNESS
+	elif now.time() >= early_bound_eve_peak.time() and now.time() < PEAK_EVENING_TIME.time():
+		# Gradual increase until peak time 
+		diff = PEAK_EVENING_TIME - now
+		newVal = CalculateIncreaseVal(diff.seconds)
+#		print diff.seconds
+		return newVal
+	elif now.time() > eve_peak_end.time() and now.time() <= late_bound_eve_peak.time():
+		# Gradual decrease until end of late bound
+		diff = late_bound_eve_peak - now
+		newVal = CalculateDecreaseVal(diff.seconds)
+#		print diff.seconds
+		return newVal			
 	else:
-		# Sunrise
-		print "sss"
+		# All other cases return
+		return DEFAULT_BRIGHTNESS
+		 
+
 
 def CalculateIncreaseVal(seconds):
 	val = ((((seconds * -1) / 10) / 2) + 270)

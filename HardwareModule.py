@@ -1,5 +1,6 @@
 import  MotionModule
 import LedControlModule
+import DynamicLightModule
 from threading import Timer
 from neopixel import *
 from random import randint
@@ -31,10 +32,24 @@ def LedStart(sender):
 	global LedState
 	if LedState == 0:
 		LedState = 1
+		brightness = DynamicLightModule.GetBrightness() 
+		
+		if brightness == 0:
+			return # Switch off as it is day time
+
 		colors = [Color(0,255,0),Color(0,0,255),Color(100,100,100)]	
 		ranColor = [Color(randint(0,255),randint(0,255),randint(0,255)),Color(randint(0,255),randint(0,255),randint(0,255))]
-		LedControlModule.PulseColors(colors)
-#		LedControlModule.Wipe(Color(44,0,44), 2)
+
+		delay = 20
+		if brightness > 140:
+			delay = ((brightness * -1) / 2) + 130
+		else:
+			delay = (brightness * -1) + 130
+
+		print delay
+		LedControlModule.SetBrightness(brightness)
+#		LedControlModule.PulseColors(colors, brightness, delay=delay)
+		LedControlModule.Wipe(Color(44,0,44), 2)
 #		LedControlModule.RandPos(ranColor)
 #		LedControlModule.Bounce(Color(22,33,120), 2, 50)
 #		LedControlModule.SetBlock(Color(100,0,100))
@@ -48,6 +63,7 @@ def LedStop():
 	LedControlModule.Wipe(Color(0,0,0))
 
 def LedReset():
+	MotionModule.sigMotion.disconnect(LedStart)
 	global ResetRequested
 	ResetRequested = 1
 	print("Reset")

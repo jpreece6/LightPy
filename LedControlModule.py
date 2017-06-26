@@ -1,7 +1,6 @@
 # TODO
 # Add background color setting to be applied to all animations
 # Make animations stackable (to play one after another)
-# Make brightness setting a global setting to apply to all animations
 # Create random selected animations to begin and end
 # Modify animations to transition to and from default light color 
 # Monitor time of day to control brightness and only switch on at "dark" times
@@ -28,7 +27,6 @@ def Setup():
 	SwitchOff()
 
 def SwitchOff():
-	strip.setBrightness(0)
 	for j in range(strip.numPixels()):
 		strip.setPixelColor(j, Color(0,0,0))
 
@@ -48,11 +46,16 @@ def SetStripColor(color, brightness=180):
 	for j in range(strip.numPixels()):
 		strip.setPixelColor(j, color)
 	strip.setBrightness(brightness)
-	strip.show
+	strip.show()
 
+def SetBrightness(val):
+	strip.setBrightness(val)
+#	strip.show()
  
-def Fade(color, step=1, startBright=180, endBright=0, iterDelay=100, transitionDelay=20):
+def Fade(color, step=1, startBright=180, endBright=0, transitionDelay=20):
 	SetStripColor(color, startBright)
+#	print transitionDelay
+	time.sleep(transitionDelay/1000.0)
 	for i in range(startBright, endBright, step):
 		strip.setBrightness(i)
 		time.sleep(transitionDelay/1000.0)
@@ -66,19 +69,19 @@ def Pulse(color, iterations=1):
 		Fade(color, -1, 180, 0)
 #	animationComplete.send()
 
-def PulseColors(colors, endState=1,  iterations=1): 
+def PulseColors(colors, maxBrightness=180, endState=1, delay=20, iterations=1): 
 	for l in range(iterations):
 		for j in colors[:-1]:
-			Fade(j, 1, 0, 180)
-			Fade(j, -1, 180, 0)
+			Fade(j, 1, 0, maxBrightness, delay)
+			Fade(j, -1, maxBrightness, 0, delay)
 			time.sleep(100/1000.0)			
 		else:
-			Fade(colors[-1], 1, 0, 180)
+			Fade(colors[-1], 1, 0, maxBrightness, delay)
 
 #	animationComplete.send()
 
 def Wipe(color, direction=1, brightness=180, delay=30):
-	strip.setBrightness(brightness)
+#	strip.setBrightness(brightness)
 	workingRange = strip.numPixels()
 	
 	if direction == 1:
@@ -93,7 +96,7 @@ def Wipe(color, direction=1, brightness=180, delay=30):
 		
 def RandPos(colors, delay=20):
 	active = [0] * strip.numPixels()
-	strip.setBrightness(180)	
+#	strip.setBrightness(180)	
 	while 0 in active:
 		target = randint(0, strip.numPixels() - 1)
 		if (active[target] == 0):
@@ -103,7 +106,7 @@ def RandPos(colors, delay=20):
 			strip.show()
 
 def Bounce(color, size=4, speed=30, iterations=4, delay=30):
-	strip.setBrightness(180)
+#	strip.setBrightness(180)
 	for i in range(iterations):
 # Left
 		for r in range(strip.numPixels()+size):
@@ -125,14 +128,14 @@ def Bounce(color, size=4, speed=30, iterations=4, delay=30):
 			time.sleep(speed/1000.0)
 
 def SetBlock(color, start=4, size=4):
-	strip.setBrightness(180)
+#	strip.setBrightness(180)
 	for j in range(size):
 		strip.setPixelColor(start+j, color)
 		strip.show()
 	time.sleep(10/1000.0)
 
 def Split(baseColor, color, speed=70):
-	strip.setBrightness(180)
+#	strip.setBrightness(180)
 	for j in range(strip.numPixels()):
 		strip.setPixelColor(j, baseColor)
 	strip.show()	
