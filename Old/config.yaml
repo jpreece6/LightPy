@@ -1,0 +1,19 @@
+geoLocation:
+  place: Stroud UK
+  enabled: false
+  latitude: 51.7457
+  longitude: 2.2178
+  api_key: AIzaSyCyCLvLMJooiqM_FEeSQf8bAYaDmOEEMps
+leds:
+  count: 31
+  brightness:
+    max: 220
+    min: 100
+    default: 30
+    dynamic:
+      enabled: true
+      peak_time: 18:00
+      warmup: 30 # Minutes
+      cooldown: 30 # Minutes
+      use_sunset: false
+      

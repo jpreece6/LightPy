@@ -6,6 +6,7 @@
 # Monitor time of day to control brightness and only switch on at "dark" times
 
 import time
+import ConfigReader
 from neopixel import *
 from blinker import signal
 from random import randint
@@ -23,6 +24,9 @@ strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, 
 animationComplete = signal("animationComplete")
 
 def Setup():
+	cfg = ConfigReader.GetConfig()
+	LED_COUNT = cfg['leds']['count']
+	LED_BRIGHTNESS = cfg['leds']['brightness']['default']
 	strip.begin()
 	SwitchOff()
 
@@ -105,8 +109,9 @@ def RandPos(colors, delay=20):
 			time.sleep(delay/1000.0)
 			strip.show()
 
-def Bounce(color, size=4, speed=30, iterations=4, delay=30):
+def Bounce(color, startSize=4, speed=30, iterations=4, delay=30, add=0):
 #	strip.setBrightness(180)
+	size = startSize
 	for i in range(iterations):
 # Left
 		for r in range(strip.numPixels()+size):
@@ -117,6 +122,7 @@ def Bounce(color, size=4, speed=30, iterations=4, delay=30):
 			strip.show()
 			time.sleep(speed/1000.0)
 		
+		size = startSize + add
 		time.sleep(delay/1000.0)
 # Right
 		for l in range(strip.numPixels(), size*-1 , -1):

@@ -1,0 +1,11 @@
+strip:
+  brightness: 180
+  max_brightness: 180
+  night_brightness: 30
+geo:
+  enabled: True
+  default_longitude: 2.2178
+  default_latitude: 51.7457
+  api_key: AIzaSyCyCLvLMJooiqM_FEeSQf8bAYaDmOEEMps
+  location: Stroud UK
+  time_zone: Europe/London

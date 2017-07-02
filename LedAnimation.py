@@ -1,29 +1,37 @@
+from StoppableThread import StoppableThread
 from threading import Thread
+from blinker import signal
 
 class KeyFrame:
 	
-	Animation = 0
+	def __init__(self, animationFunc, strip, **kwargs):
+		self.Animation = animationFunc
+		self.strip = strip
+		self.kwargs = kwargs
 
-	def __init__(self, animationFunc):
-		Animation = animationFunc
-
-	def Play():
-		print("Play")
+	def Play(self):
+		self.Animation(self.strip, self.kwargs)
 
 class Animation:
-	KeyFrames = []
-	AnimationThread = Thread()	
-
-	def __init__(self) :
 	
-	def AddFrame(frame):
-		KeyFrames.append(frame)
-
-	def Play():
-		for k in KeyFrames:
+	def AnimationThread(self):
+		for k in self.KeyFrames:
 			k.Play()
+		self.AnimationComplete.send()
 
-	def Stop():
-		AnimationThread.
+	def __init__(self):
+		self.AnimationComplete = signal('AnimationComplete')
+		self.KeyFrames=[]
+		self.InternalThread = Thread(target=self.AnimationThread)
+	
+	def AddFrame(self, frame):
+		self.KeyFrames.append(frame)
 
-	def 
+	def Play(self):
+		self.InternalThread.start()
+
+	def Stop(self):
+		self.InternalThread.join()
+
+	def WaitUntilComplete(self):
+		self.InternalThread.join()

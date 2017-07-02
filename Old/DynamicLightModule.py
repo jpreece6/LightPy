@@ -4,13 +4,14 @@ import AstroModule as astro
 import time
 import datetime
 import math
+import ConfigReader
 from pytz import timezone 
 
 
-MAX_BRIGHTNESS = 190
+MAX_BRIGHTNESS = 255
 DEFAULT_BRIGHTNESS = 30
 # UTC offset
-PEAK_EVENING_TIME = datetime.datetime.today().replace(hour=21, minute=30, second=0)
+PEAK_EVENING_TIME = datetime.datetime.today().replace(hour=18, minute=0, second=0)
 PEAK_MORNING_TIME = datetime.datetime.today().replace(hour=5, minute=0, second=0)
 LOCATION = "Stroud UK"
 
@@ -18,6 +19,11 @@ PrevBrightness = 0
 
 PEAK_DURATION = datetime.timedelta(minutes=30)
 BOUND_OFFSET = datetime.timedelta(hours=1,minutes=30)
+
+def Setup():
+	cfg = ConfigReader.GetConfig()
+	MAX_BRIGHTNESS = cfg['leds']['brightness']['max']
+	DEFAULT_BRIGHTNESS = cfg['leds']['brightness']['default']
 
 def GetBrightness():
 	global PrevBrightness
@@ -53,7 +59,7 @@ def GetBrightness():
  		return MAX_BRIGHTNESS
 	elif now.time() >= early_bound_eve_peak.time() and now.time() < PEAK_EVENING_TIME.time():
 		# Gradual increase until peak time 
-		diff = PEAK_EVENING_TIME - now
+		diff = early_bound_eve_peak - now
 		newVal = CalculateIncreaseVal(diff.seconds)
 #		print diff.seconds
 		return newVal
@@ -70,6 +76,9 @@ def GetBrightness():
 
 
 def CalculateIncreaseVal(seconds):
+#	print "Before"
+#	print seconds
+#	val = (seconds / BOUND_OFFSET.seconds) * 255
 	val = ((((seconds * -1) / 10) / 2) + 270)
 	if (val > MAX_BRIGHTNESS):
 		val = MAX_BRIGHTNESS
@@ -78,14 +87,16 @@ def CalculateIncreaseVal(seconds):
 	return val
 
 def CalculateDecreaseVal(seconds):
+#	print "After"
+#	print seconds
+#	val = (seconds / BOUND_OFFSET.seconds) *  255
+#	print val
 	val = ((seconds / 10) / 2)
 	if (val > MAX_BRIGHTNESS):
 		val = MAX_BRIGHTNESS
 	elif val < 0:
 		val = 0
 	return val
-
-print GetBrightness()
 	
 	
 	
