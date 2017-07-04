@@ -24,11 +24,13 @@ class RandBuildAnimation(Animation):
             colours.append(Color(randint(0, 255), randint(0, 255), randint(0, 255)))
         return colours
 
-    def Build(self, strip):
-        colours = self.GenerateRandomColours()
-        frame1 = KeyFrame(self.BuildDef, strip, colours=colours, delay=30)
+    def BuildIn(self, strip, color=Color(30,30,90)):
+        #colours = self.GenerateRandomColours()
+        frame1 = KeyFrame(self.BuildDef, strip, colours=color, delay=30)
         self.AddFrame(frame1)
         return self
 
-    def __init__(self):
+    def __init__(self, max_brightness=30, base_color=Color(30,30,90)):
+        self.max_brightness = max_brightness
+        self.base_color = base_color
         Animation.__init__(self)

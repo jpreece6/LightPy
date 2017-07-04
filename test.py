@@ -1,30 +1,18 @@
-#import AstroModule
-#import DynamicLightModule
-
-#AstroModule.Setup()
-#result = AstroModule.GetSunrise("Stroud UK")
-
-#DynamicLightModule.Setup()
-#result = DynamicLightModule.GetBrightness()
-
 from LedController import LedController
 from BrightnessController import BrightnessController
 import ConfigReader
 import time
+import MotionModule
+import HardwareModule
 
-b = BrightnessController()
-print b.UpdateBrightness()
+try:
 
-#print ConfigReader.GetConfig()
-#bri = BrightnessController()
-#bri.UpdateBrightness()
-#print ConfigReader.GetConfig()
+    h = HardwareModule.HardwareController()
 
+    while 1:
+        h.Update()
+        time.sleep(10/1000)
 
-#cont = LedController(useConfig=False, count=31, brightness=40)
-#cont.Animations['FadeRand'].Play()
-#cont.On() 
-#time.sleep(15)
-#cont.Animations['WipeRand'].Play()
-#cont.StopAnimation()
-#cont.Off()
+except KeyboardInterrupt:
+    h.Exit()
+    print "End"

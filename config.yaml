@@ -1,7 +1,23 @@
 strip:
-  brightness: 180
+  brightness: 40
   max_brightness: 180
   night_brightness: 30
+  active_color: 
+    R: 40
+    G: 40
+    B: 90
+
+  count: 31
+  pin: 18
+  frq: 800000
+  dma: 5
+  invert: False
+  channel: 0
+
+start_animation:
+  name: Fade
+end_animation:
+  name: Wipe
 geo:
   enabled: True
   default_longitude: 2.2178
@@ -9,3 +25,5 @@ geo:
   api_key: AIzaSyCyCLvLMJooiqM_FEeSQf8bAYaDmOEEMps
   location: Stroud UK
   time_zone: Europe/London
+motion:
+  timeout: 3

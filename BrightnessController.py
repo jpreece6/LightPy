@@ -14,7 +14,7 @@ class BrightnessController:
         # N| -> |SS
         if now.time() > early_bound.time() and now.time() < self.astro.Sunset.time():
             diff = self.astro.Sunset - now
-            return self.Scale(60, diff.seconds / 60)
+            return self.FlipScale(self.Scale(60, diff.seconds / 60))
         
         # SS| -> |EP
         elif now.time() > self.astro.Sunset.time() and now.time() < peak_late.time():
@@ -31,6 +31,9 @@ class BrightnessController:
             return self.night_brightness
         else:
             return 0
+
+    def FlipScale(self, value):
+        return ((value - self.max_brightness) +1) *-1 # Scale and flip
 
     def Scale(self, oldRange, minutes):
         newRange = self.max_brightness - self.night_brightness

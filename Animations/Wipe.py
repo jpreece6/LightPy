@@ -20,23 +20,29 @@ class WipeAnimation(Animation):
         else:
             return range(ledCount, -1, -1)
 
-    def Wipe(self, strip, direction=1):
+    def WipeIn(self, strip, direction=1, color=Color(0,0,255)):
         ledCount = strip.numPixels()
         workingRange = self.CalculateRange(direction, ledCount)
 
         for j in workingRange:
-            frame1 = KeyFrame(self.WipeDef, strip, pos=j, col=Color(0,0,255), delay=40)
+            frame1 = KeyFrame(self.WipeDef, strip, pos=j, col=color, delay=40)
             self.AddFrame(frame1)
         return self
 
-    def WipeRand(self, strip, direction=1):
+    def WipeRandIn(self, strip, direction=1, iterations=1):
         ledCount = strip.numPixels()
         workingRange = self.CalculateRange(direction, ledCount)
 
+        for x in range(iterations):
+            for j in workingRange:
+                frame1 = KeyFrame(self.WipeDef, strip, pos=j, col=Color(randint(0, 255), randint(0, 255), randint(0, 255)), delay=40)
+                self.AddFrame(frame1)
         for j in workingRange:
-            frame1 = KeyFrame(self.WipeDef, strip, pos=j, col=Color(randint(0, 255), randint(0, 255), randint(0, 255)), delay=40)
-            self.AddFrame(frame1)
+                frame1 = KeyFrame(self.WipeDef, strip, pos=j, col=self.base_color, delay=40)
+                self.AddFrame(frame1)
         return self
 
-    def __init__(self):
+    def __init__(self, max_brightness=30, base_color=Color(30,30,90)):
+        self.max_brightness = max_brightness
+        self.base_color = base_color
         Animation.__init__(self)

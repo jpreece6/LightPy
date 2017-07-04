@@ -9,6 +9,7 @@ from RandBuild import RandBuildAnimation
 from Split import SplitAnimation
 from Bounce import BounceAnimation
 import ConfigReader
+import BrightnessController
 
 class LedController:
 
@@ -23,6 +24,7 @@ class LedController:
             self.brightness = self.cfg['strip']['brightness']
             self.invert = self.cfg['strip']['invert']
             self.channel = self.cfg['strip']['channel']
+            self.activeColor = Color(self.cfg['strip']['active_color']['R'], self.cfg['strip']['active_color']['G'], self.cfg['strip']['active_color']['B'])
         else:
             self.count = count
             self.pin = pin
@@ -31,31 +33,49 @@ class LedController:
             self.brightness = brightness
             self.invert = invert
             self.channel = channel
+            self.activeColor = Color(60,60,90)
             
         self.type = ws.WS2811_STRIP_GRB
         self.strip = Adafruit_NeoPixel(self.count, self.pin, self.frq, self.dma, self.invert, self.brightness, self.channel, ws.WS2811_STRIP_GRB)
         self.strip.begin()
+
+        self.BrightnessController = BrightnessController.BrightnessController()
+        self.SetBrightness()
+
         self.RegisterAnimations()
+        self.AnimationCompleteEvent = signal('anim_complete')
 
     def RegisterAnimations(self):
-        self.Animations = {}
-        self.Animations['FadeOut'] = FadeAnimation().FadeOut(self.strip)
-        self.Animations['FadeIn'] = FadeAnimation().FadeIn(self.strip)
-        self.Animations['Fade'] = FadeAnimation().Fade(self.strip, [Color(0,0,255), Color(255,0,0)])
-        self.Animations['FadeRand'] = FadeAnimation().FadeRand(self.strip)
-        self.Animations['Wipe'] = WipeAnimation().Wipe(self.strip, 0)
-        self.Animations['WipeRand'] = WipeAnimation().WipeRand(self.strip)
-        self.Animations['RandBuild'] = RandBuildAnimation().Build(self.strip)
-        self.Animations['Split'] = SplitAnimation().Split(self.strip)
-        self.Animations['SplitRand'] = SplitAnimation().SplitRand(self.strip)
-        self.Animations['Bounce'] = BounceAnimation().Bounce(self.strip)
-        self.Animations['BounceRand'] = BounceAnimation().BounceRand(self.strip)
+        self.StartAnimations = {}
+        self.StartAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeIn(self.strip)
+        self.StartAnimations['FadeColours'] = FadeAnimation(self.brightness).FadeColoursIn(self.strip, [Color(0,0,255), Color(255,0,0)])
+        self.StartAnimations['FadeRandIn'] = FadeAnimation(self.brightness, self.activeColor).FadeRandIn(self.strip, 3)
+        self.StartAnimations['Wipe'] = WipeAnimation(self.brightness, self.activeColor).WipeIn(self.strip, 0, self.activeColor)
+        self.StartAnimations['WipeRand'] = WipeAnimation(self.brightness, self.activeColor).WipeRandIn(self.strip)
+        #self.StartAnimations['RandBuild'] = RandBuildAnimation(self.brightness, self.activeColor).BuildIn(self.strip, self.activeColor)
+        #self.StartAnimations['Split'] = SplitAnimation().Split(self.strip)
+        #self.StartAnimations['SplitRand'] = SplitAnimation().SplitRand(self.strip)
+        #self.StartAnimations['Bounce'] = BounceAnimation().Bounce(self.strip)
+        #self.StartAnimations['BounceRand'] = BounceAnimation().BounceRand(self.strip)
 
-        for v in self.Animations.itervalues():
+        self.EndAnimations = {}
+        self.EndAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeOut(self.strip)
+
+        for v in self.StartAnimations.itervalues():
+            v.AnimationComplete.connect(self.AnimationComplete)
+
+        for v in self.EndAnimations.itervalues():
             v.AnimationComplete.connect(self.AnimationComplete)
 
     def AnimationComplete(self, sender):
-        print "End"
+        self.SetBrightness()
+        self.RegisterAnimations() # Reset animations to allow restart of sub threads (not best performace but meh)
+        self.AnimationCompleteEvent.send()
+
+    def SetBrightness(self):
+        #self.brightness = self.BrightnessController.CalculateBrightness()
+        self.brightness
+        self.strip.setBrightness(self.brightness)
 
     def On(self):
         for j in range(self.strip.numPixels()):
