@@ -7,8 +7,6 @@ from blinker import signal
 from threading import Timer
 import random
 
-# Flag animations as ON or OFF animations to display an active color after and ON animation and switch off leds after a OFF animation
-
 class HardwareController:
 
     def Triggered(self, sender):

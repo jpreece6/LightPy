@@ -45,6 +45,17 @@ class FadeAnimation(Animation):
         self.AddFrame(frame3)
         return self
 
+    def FadeColoursOut(self, strip, colors, iterations=1):
+        frame = KeyFrame(self.FadeDef, strip, stBright=self.max_brightness, edBright=0, col=self.base_color, delay=20)
+        self.AddFrame(frame)
+        for x in range(iterations):
+            for j in colors:
+                frame1 = KeyFrame(self.FadeDef, strip, stBright=0, edBright=self.max_brightness, col=j, delay=20)
+                frame2 = KeyFrame(self.FadeDef, strip, stBright=self.max_brightness, edBright=-1, col=j, delay=20)
+                self.AddFrame(frame1)
+                self.AddFrame(frame2)
+        return self
+
     def FadeRand(self, strip, iterations=1):
         for j in range(iterations):
             color = Color(randint(0, 255), randint(0, 255), randint(0, 255))
@@ -67,10 +78,17 @@ class FadeAnimation(Animation):
         self.AddFrame(frame3)
 
         return self
-    
-    def AddActiveFrame(self, strip, color):
-        frame1 = KeyFrame(self.FadeDef, strip, stBright=0, edBright=self.max_brightness, col=color, delay=20)
-        self.AddFrame(frame1)
+
+    def FadeRandOut(self, strip, iterations=1):
+        frame = KeyFrame(self.FadeDef, strip, stBright=self.max_brightness, edBright=0, col=self.base_color, delay=20)
+        self.AddFrame(frame)
+        for j in range(iterations):
+            color = Color(randint(0, 255), randint(0, 255), randint(0, 255))
+            frame1 = KeyFrame(self.FadeDef, strip, stBright=0, edBright=self.max_brightness, col=color, delay=20)
+            frame2 = KeyFrame(self.FadeDef, strip, stBright=self.max_brightness, edBright=-1, col=color, delay=20)
+            self.AddFrame(frame1)
+            self.AddFrame(frame2)
+
         return self
 
     def __init__(self, max_brightness=30, base_color=Color(30,30,90)):

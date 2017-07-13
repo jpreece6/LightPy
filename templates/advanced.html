@@ -1,0 +1,69 @@
+{% extends "header.html" %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-lg-1 col-xl-1 col-centered">
+        <form class="form-horizontal" method="POST" action="{{ url_for('advanced_settings') }}">
+            <fieldset>
+                <div class="form-group">
+                    <label for="inputNumLeds" class="col-lg-2 control-label"># Leds</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="ledCount" class="form-control" id="inputNumLeds" max="300" step="1" value="{{ strip['count'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPin" class="col-lg-2 control-label">Pin #</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="pinNum" class="form-control" id="inputPin" max="30" step="1" value="{{ strip['pin'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox col-lg-2">
+                        <label>
+                            <input type="checkbox" name="geoEnabled" id="inputManual" name="manual" checked="{{ geo['enabled'] }}" >Use geo location
+                        </label>        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputApiKey" class="col-lg-2 control-label">Google Maps Api Key</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="apiKey" class="form-control" id="inputApiKey" placeholder="Key" value="{{ geo['api_key'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputLocation" class="col-lg-2 control-label">Location</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="location" class="form-control" id="inputLocation" placeholder="E.g. Stroud" value="{{ geo['location'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2 col-centered">
+                            <div class="col-xs-6">
+                                <label for="inputLat" class="control-label">Default Latitude</label>
+                                <input type="number" name="lat" class="form-control" id="inputLay" value="{{ geo['default_latitude'] }}"/>
+                            </div>
+                            <div class="col-xs-6">
+                                <label for="inputLon" class="control-label">Default Logitude</label>
+                                <input type="number" name="lon" class="form-control" id="inputLon" value="{{ geo['default_longitude'] }}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10">
+                        <input type="submit" class="btn btn-success btn-block" value="Save"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10">
+                        <a href="{{ url_for('index') }}"  class="btn btn-danger btn-block">Cancel</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -11,7 +11,6 @@ class AstroCalculator:
         return self.observer.next_setting(self.sun).datetime()
 
     def __init__(self):
-        self.cfg = ConfigReader.GetConfig()
         self.geoLocator = GeoLocator()
         self.observer = ephem.Observer()
         self.observer.lat = self.geoLocator.Latitude

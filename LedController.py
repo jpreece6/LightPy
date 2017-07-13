@@ -47,19 +47,25 @@ class LedController:
 
     def RegisterAnimations(self):
         self.StartAnimations = {}
-        self.StartAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeIn(self.strip)
-        self.StartAnimations['FadeColours'] = FadeAnimation(self.brightness).FadeColoursIn(self.strip, [Color(0,0,255), Color(255,0,0)])
-        self.StartAnimations['FadeRandIn'] = FadeAnimation(self.brightness, self.activeColor).FadeRandIn(self.strip, 3)
-        self.StartAnimations['Wipe'] = WipeAnimation(self.brightness, self.activeColor).WipeIn(self.strip, 0, self.activeColor)
-        self.StartAnimations['WipeRand'] = WipeAnimation(self.brightness, self.activeColor).WipeRandIn(self.strip)
+        #self.StartAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeIn(self.strip)
+        #self.StartAnimations['FadeColours'] = FadeAnimation(self.brightness).FadeColoursIn(self.strip, [Color(0,0,255), Color(255,0,0)])
+        #self.StartAnimations['FadeRandIn'] = FadeAnimation(self.brightness, self.activeColor).FadeRandIn(self.strip, 3)
+        #self.StartAnimations['Wipe'] = WipeAnimation(self.brightness, self.activeColor).WipeIn(self.strip, 0, self.activeColor)
+        #self.StartAnimations['WipeRand'] = WipeAnimation(self.brightness, self.activeColor).WipeRandIn(self.strip)
         #self.StartAnimations['RandBuild'] = RandBuildAnimation(self.brightness, self.activeColor).BuildIn(self.strip, self.activeColor)
-        #self.StartAnimations['Split'] = SplitAnimation().Split(self.strip)
-        #self.StartAnimations['SplitRand'] = SplitAnimation().SplitRand(self.strip)
+        #self.StartAnimations['Split'] = SplitAnimation(self.brightness, self.activeColor).SplitIn(self.strip)
+        self.StartAnimations['SplitRand'] = SplitAnimation(self.brightness, self.activeColor).SplitRandIn(self.strip)
         #self.StartAnimations['Bounce'] = BounceAnimation().Bounce(self.strip)
         #self.StartAnimations['BounceRand'] = BounceAnimation().BounceRand(self.strip)
 
         self.EndAnimations = {}
-        self.EndAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeOut(self.strip)
+        #self.EndAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeOut(self.strip)
+        #self.EndAnimations['FadeColours'] = FadeAnimation(self.brightness).FadeColoursOut(self.strip, [Color(0,0,255), Color(255,0,0)])
+        #self.EndAnimations['FadeRandIn'] = FadeAnimation(self.brightness, self.activeColor).FadeRandOut(self.strip, 3)
+        #self.EndAnimations['Wipe'] = WipeAnimation(self.brightness, self.activeColor).WipeOut(self.strip, 0, self.activeColor)
+        #self.EndAnimations['WipeRand'] = WipeAnimation(self.brightness, self.activeColor).WipeRandOut(self.strip)
+        #self.EndAnimations['Split'] = SplitAnimation(self.brightness, self.activeColor).SplitOut(self.strip)
+        self.EndAnimations['SplitRand'] = SplitAnimation(self.brightness, self.activeColor).SplitRandOut(self.strip)
 
         for v in self.StartAnimations.itervalues():
             v.AnimationComplete.connect(self.AnimationComplete)
@@ -73,8 +79,8 @@ class LedController:
         self.AnimationCompleteEvent.send()
 
     def SetBrightness(self):
-        #self.brightness = self.BrightnessController.CalculateBrightness()
-        self.brightness
+        #self.brightness = self.BrightnessController.CalculateBrightness(self.cfg)
+        #self.brightness
         self.strip.setBrightness(self.brightness)
 
     def On(self):

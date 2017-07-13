@@ -49,8 +49,8 @@ class BrightnessController:
         #self.cfg['strip']['brightness'] = self.CalculateBrightness()
         #ConfigReader.Dump(self.cfg)
 
-    def __init__(self):
-        self.cfg = ConfigReader.GetConfig()
+    def __init__(self, cfg):
+        self.cfg = cfg #ConfigReader.GetConfig()
         self.astro = Astro.AstroCalculator()
         self.midnight = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
         self.max_brightness = self.cfg['strip']['max_brightness']
