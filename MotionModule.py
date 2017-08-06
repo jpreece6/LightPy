@@ -7,14 +7,14 @@ class PIRSensor:
 
 	def ReadPin(self):
 		if GPIO.input(PIR_PIN):
-			self.SignalMotion.send()
+#			self.SignalMotion.send()
 			return True
 		return False
 
 	def __init__(self):
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(PIR_PIN, GPIO.IN)
-		self.SignalMotion = signal('motion')
+#		self.SignalMotion = signal('motion')
 
 	def __del__(self):
 		GPIO.cleanup()

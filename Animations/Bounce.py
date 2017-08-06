@@ -33,19 +33,19 @@ class BounceAnimation(Animation):
 
     def Bounce(self, strip, iterations=2):
         for j in range(iterations):
-            frame1 = KeyFrame(self.Left, strip, delay=40, color=Color(0,0,255), size=4)
-            frame2 = KeyFrame(self.Right, strip, delay=40, color=Color(0,0,255), size=4)
+            frame1 = KeyFrame(self.Left, strip, delay=30, color=Color(0,0,255), size=4)
+            frame2 = KeyFrame(self.Right, strip, delay=30, color=Color(0,0,255), size=4)
             self.AddFrame(frame1)
             self.AddFrame(frame2)
         frame3 = KeyFrame(self.FadeDef, strip, stBright=0, edBright=self.max_brightness, col=self.base_color, delay=20)
         self.AddFrame(frame3)
         return self
 
-    def BounceRand(self, strip, iterations=4):
+    def BounceRand(self, strip, iterations=2):
         color = Color(randint(0, 255), randint(0, 255), randint(0, 255))
         for j in range(iterations):
-            frame1 = KeyFrame(self.Left, strip, delay=40, color=color, size=4)
-            frame2 = KeyFrame(self.Right, strip, delay=40, color=color, size=4)
+            frame1 = KeyFrame(self.Left, strip, delay=30, color=color, size=4)
+            frame2 = KeyFrame(self.Right, strip, delay=30, color=color, size=4)
             self.AddFrame(frame1)
             self.AddFrame(frame2)
 

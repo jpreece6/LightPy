@@ -13,7 +13,8 @@ def index():
     animation_list = cfg['animations']
     start_animation = cfg['start_animation']
     end_animation = cfg['end_animation']
-    return render_template("index.html", strip=strip, animation_list=animation_list, start_animation=start_animation, end_animation=end_animation)
+    onDuration = cfg['onTime']
+    return render_template("index.html", strip=strip, animation_list=animation_list, start_animation=start_animation, end_animation=end_animation, onDuration=onDuration)
 
 @app.route('/update_settings', methods=['POST'])
 def update_settings():
@@ -31,6 +32,7 @@ def update_settings():
 
     cfg['start_animation'] = request.form['startAnimation']
     cfg['end_animation'] = request.form['endAnimation']
+    cfg['onTime'] = int(request.form['onDuration'])
 
     cfg = ConfigReader.Dump(cfg)
     return redirect(url_for('index'))

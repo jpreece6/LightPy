@@ -33,7 +33,7 @@ if __name__ == '__main__':
 				h.Update()
 			
 
-			time.sleep(100/1000.0)
+			time.sleep(500/1000.0)
 	except Exception, e:
 		print str(e)
 	finally:

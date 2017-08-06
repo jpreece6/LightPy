@@ -16,7 +16,7 @@ class HardwareController:
             self.AnimationIsRunning = True
             self.TimoutLatch = True
             self.LedController.Off()
-            
+            print "ON"
             if (self.cfg['start_animation'] == 'Random'):
                 choice = random.choice(self.LedController.StartAnimations.keys())
             else:
@@ -28,24 +28,30 @@ class HardwareController:
             self.TimoutTimer.start()
 
     def AnimationComplete(self, sender):
+        if (self.EndLatch == True):
+            self.LedController.Off()
+
         self.AnimationIsRunning = False
         self.EndLatch = False
 
     def Update(self):
         detected = self.MotionSensor.ReadPin()
         if detected:
-            self.Triggered()
+        	self.Triggered()
+		#print "Motion"
 
     def UpdateLatch(self):
         now = time.time()
         diff = now - self.LastMotion
+	    #print diff
         # Difference in seconds
-        if (diff >= 6):
+        if (diff >= self.OnTime):
+            print "OFF"
             if (self.cfg['end_animation'] == 'Random'):
                 choice = random.choice(self.LedController.EndAnimations.keys())
             else:
                 choice = self.cfg['end_animation']
-
+            #print choice
             self.LedController.EndAnimations[choice].Play()
             self.TimoutLatch = False
             self.EndLatch = True
@@ -65,6 +71,7 @@ class HardwareController:
         self.cfg = ConfigReader.GetConfig()
         self.MotionSensor = MotionModule.PIRSensor()
         #self.MotionSensor.SignalMotion.connect(self.Triggered)
+        self.OnTime = self.cfg['onTime']
         self.LedController = LedController.LedController()
         self.LedController.AnimationCompleteEvent.connect(self.AnimationComplete)
         self.AnimationIsRunning = False
