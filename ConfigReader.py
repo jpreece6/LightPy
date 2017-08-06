@@ -1,6 +1,7 @@
 import yaml
 
-Path = "config.yaml"
+#Path = "/tmp/config.yaml"
+Path = "/home/pi/LightPy/config.yaml"
 
 def GetConfig() :
 	with open(Path, 'r') as ymlfile:

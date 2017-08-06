@@ -1,25 +1,37 @@
 from flask import Flask, render_template, request, redirect, url_for
 import ConfigReader
+import re
 from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route('/')
-@app.route("/index")
+@app.route('/', methods=['GET', 'POST'])
+@app.route("/index", methods=['GET', 'POST'])
 def index():
     cfg = ConfigReader.GetConfig()
     strip = cfg['strip']
-    brightness = strip['night_brightness']
-    red = strip['active_color']['R']
-    green = strip['active_color']['G']
-    blue = strip['active_color']['B']
-    return render_template("index.html", brightness=brightness, red=red, green=green, blue=blue)
+    animation_list = cfg['animations']
+    start_animation = cfg['start_animation']
+    end_animation = cfg['end_animation']
+    return render_template("index.html", strip=strip, animation_list=animation_list, start_animation=start_animation, end_animation=end_animation)
 
 @app.route('/update_settings', methods=['POST'])
 def update_settings():
-    print request.form.get('manual')
     cfg = ConfigReader.GetConfig()
-    cfg['strip']['night_brightness'] = request.form['brightness']
+    cfg['strip']['night_brightness'] = int(request.form['brightness'])
+    cfg['strip']['less_than_time'] = request.form['onTime']
+    cfg['strip']['greater_than_time'] = request.form['endTime']
+
+    rgbaVal = request.form['activeColor']
+    cleanVal = re.sub(r'^.*\(',"", rgbaVal)
+    processedVal = re.sub(r'\)',"", cleanVal).split(',')
+    cfg['strip']['active_color']['R'] = int(processedVal[0])
+    cfg['strip']['active_color']['G'] = int(processedVal[1])
+    cfg['strip']['active_color']['B'] = int(processedVal[2])
+
+    cfg['start_animation'] = request.form['startAnimation']
+    cfg['end_animation'] = request.form['endAnimation']
+
     cfg = ConfigReader.Dump(cfg)
     return redirect(url_for('index'))
 
@@ -34,13 +46,13 @@ def advanced_settings():
         cfg = ConfigReader.GetConfig()
         strip = cfg['strip']
         geo = cfg['geo']
-        strip['count'] = request.form.get('ledCount')
-        strip['pin'] = request.form.get('pinNum')
-        geo['enabled'] = request.form.get('geoEnabled')
-        geo['api_key'] = request.form.get('apiKey')
-        geo['location'] = request.form.get('location')
-        geo['default_latitude'] = request.form.get('lat')
-        geo['default_longitude'] = request.form.get('lon')
+        strip['count'] = int(request.form.get('ledCount'))
+        strip['pin'] = int(request.form.get('pinNum'))
+        geo['enabled'] = bool(request.form.get('geoEnabled'))
+        geo['api_key'] = str(request.form.get('apiKey'))
+        geo['location'] = str(request.form.get('location'))
+        geo['default_latitude'] = float(request.form.get('lat'))
+        geo['default_longitude'] = float(request.form.get('lon'))
         cfg = ConfigReader.Dump(cfg)
         return redirect('index')
 
@@ -61,5 +73,16 @@ def login():
 def inject_now():
     return {'now': datetime.utcnow()}
 
-if __name__ == "__main__":
+
+def Start():
     app.run(debug=True, host='0.0.0.0')
+
+def Stop():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return "Shutting down..."
+
+if __name__ == "__main__":
+    Start()

@@ -1,26 +1,34 @@
 import HardwareModule
-import RPi.GPIO as GPIO
 import time
 import os
 import sys
 import ConfigReader
 
-try:
-	#cfg = ConfigReader.GetConfig()
-	#print(cfg['location']['place'])
 
-	HardwareModule.Setup()
-	while 1:
-		HardwareModule.MotionModule.ReadPin()
-		time.sleep(10/1000.0)
-except KeyboardInterrupt:
-	print ("End")
-finally:
-	HardwareModule.LedReset()
-	time.sleep(1)
-	GPIO.cleanup()
-	print ("Clean")
-#	sys.exit(0)
-	os._exit(0)
-	
+if __name__ == '__main__':
+
+	cfg = ConfigReader.GetConfig()
+	onTime = cfg['strip']['less_than_time']
+	endTime = cfg['strip']['greater_than_time']
+	h = HardwareModule.HardwareController()
+
+	try:
+
+		while 1:
+			nowTime = time.strftime('%H:%M')
+
+			if (nowTime <= onTime):
+				h.Update()
+			elif (nowTime >= endTime):
+				h.Update()
+			
+
+			time.sleep(100/1000.0)
+	except Exception, e:
+		print str(e)
+	finally:
+		h.Exit()
+		print ("Clean")
+		os._exit(0)
+		
 	

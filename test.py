@@ -8,9 +8,9 @@ import HardwareModule
 try:
 
     h = HardwareModule.HardwareController()
-
+    h.Triggered()
     while 1:
-        h.Update()
+        #h.Update()
         time.sleep(10/1000)
 
 except KeyboardInterrupt:

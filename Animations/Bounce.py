@@ -37,6 +37,8 @@ class BounceAnimation(Animation):
             frame2 = KeyFrame(self.Right, strip, delay=40, color=Color(0,0,255), size=4)
             self.AddFrame(frame1)
             self.AddFrame(frame2)
+        frame3 = KeyFrame(self.FadeDef, strip, stBright=0, edBright=self.max_brightness, col=self.base_color, delay=20)
+        self.AddFrame(frame3)
         return self
 
     def BounceRand(self, strip, iterations=4):
@@ -46,7 +48,31 @@ class BounceAnimation(Animation):
             frame2 = KeyFrame(self.Right, strip, delay=40, color=color, size=4)
             self.AddFrame(frame1)
             self.AddFrame(frame2)
+
+        frame3 = KeyFrame(self.FadeDef, strip, stBright=0, edBright=self.max_brightness, col=self.base_color, delay=20)
+        self.AddFrame(frame3)
         return self
 
-    def __init__(self):
+    def FadeDef(self, strip, kwargs):
+        startBright = kwargs['stBright']
+        endBright = kwargs['edBright']
+        ledColor = kwargs['col']
+        delay = kwargs['delay']
+        step = 1
+
+        if (startBright > endBright):
+            step = -1
+
+        #strip.setBrightness(0)
+        for j in range(strip.numPixels()):
+            strip.setPixelColor(j, ledColor)
+
+        for i in range(startBright, endBright, step):
+            strip.setBrightness(i)
+            time.sleep(delay/1000.0)
+            strip.show()
+
+    def __init__(self, max_brightness=30, base_color=Color(30,30,90)):
+        self.max_brightness = max_brightness
+        self.base_color = base_color
         Animation.__init__(self)

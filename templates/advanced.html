@@ -6,6 +6,19 @@
     <div class="col-lg-1 col-xl-1 col-centered">
         <form class="form-horizontal" method="POST" action="{{ url_for('advanced_settings') }}">
             <fieldset>
+                <legend>Strip Settings</legend>
+                <div class="form-group">
+                    <label for="inputNight" class="col-lg-2 control-label">Night Brightness</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="nightBright" class="form-control" id="inputNight" max=255 step="1" value="{{ strip['night_brightness'] }}"/>
+                    </div>    
+                </div>
+                <div class="form-group">
+                    <label for="inputMax" class="col-lg-2 control-label">Max Brightness</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="maxBright" class="form-control" id="inputMax" max=255 step="1" value="{{ strip['max_brightness'] }}"/>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="inputNumLeds" class="col-lg-2 control-label"># Leds</label>
                     <div class="col-lg-10">
@@ -19,9 +32,37 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputChannel" class="col-lg-2 control-label">Channel</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="channel" class="form-control" id="inputChannel" max="1" step="1" value="{{ strip['channel'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputFrq" class="col-lg-2 control-label">FRQ</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="frq" class="form-control" id="inputFrq" step="1" value="{{ strip['frq'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputDma" class="col-lg-2 control-label">DMA</label>
+                    <div class="col-lg-10">
+                        <input type="number" name="dma" class="form-control" id="inputDma" step="1" value="{{ strip['dma'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="checkbox col-lg-2">
                         <label>
-                            <input type="checkbox" name="geoEnabled" id="inputManual" name="manual" checked="{{ geo['enabled'] }}" >Use geo location
+                            <input type="checkbox" name="invert" id="inputInvert" checked="{{ strip['invert'] }}" >Inverted
+                        </label>        
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Geo Location</legend>
+                <div class="form-group">
+                    <div class="checkbox col-lg-2">
+                        <label>
+                            <input type="checkbox" name="geoEnabled" id="inputManual" checked="{{ geo['enabled'] }}" >Use geo location
                         </label>        
                     </div>
                 </div>
@@ -51,6 +92,8 @@
                         </div>
                     </div>
                 </div>
+            </fieldset>
+            <fieldset>
                 <div class="form-group">
                     <div class="col-lg-10">
                         <input type="submit" class="btn btn-success btn-block" value="Save"/>

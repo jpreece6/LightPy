@@ -9,13 +9,15 @@
                 <div class="form-group">
                     <label for="inputBaseBright" class="col-lg-2 col-md-2 control-label">Base Brightness</label>
                     <div class="col-lg-10 col-md-10">
-                        <input type="number" class="form-control" id="inputBaseBright" name="brightness" max="255" step="1" value="{{ brightness }}"/>
+                        <input type="number" class="form-control" id="inputBaseBright" name="brightness" max="255" step="1" value="{{ strip['brightness'] }}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-lg-10">
-                        <input type="hidden" id="inputColor" name="activeColor"/>
-                        <div id="cp1" class="inl-bl"></div>
+                        
+                        <div id="cp1" class="inl-bl">
+                            <input type="hidden" id="inputColor" name="activeColor"/>
+                        </div>
                         <style>
                             .inl-bl {
                                 display: inline-block;
@@ -42,7 +44,7 @@
                         <script>
                             $(function() {
                                 $('#cp1').colorpicker({
-                                    color: 'rgb({{ red }},{{ green }},{{ blue }})',
+                                    color: 'rgb({{ strip["active_color"]["R"] }},{{ strip["active_color"]["G"] }},{{ strip["active_color"]["B"] }})',
                                     container: true,
                                     inline: true,
                                     customClass: 'colorpicker-2x',
@@ -65,15 +67,62 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="onTime" class="col-lg-2 col-md-2 control-label">Less Than Time</label>
+                    <div class="col-lg-10">
+                        <div class="input-group clockpicker" data-align="top" data-autoclose="true">
+                            <input type="text" class="form-control" value="{{ strip['less_than_time'] }}" name="onTime">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                        <script type="text/javascript">
+                        $('.clockpicker').clockpicker();
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="endTime" class="col-lg-2 col-md-2 control-label">Greater Than Time</label>
+                    <div class="col-lg-10">
+                        <div class="input-group clockpicker" data-align="top" data-autoclose="true">
+                            <input type="text" class="form-control" value="{{ strip['greater_than_time'] }}" name="endTime">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                        <script type="text/javascript">
+                        $('.clockpicker').clockpicker();
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-lg-10">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" id="inputManual" name="manual">Manual Override
+                                <input type="checkbox" id="inputManual" name="manual" >Manual Override
                             </label>        
                         </div>
                     </div>
                 </div>
-                
+                <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">Start Animation</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="select" name="startAnimation">
+                        {% for anim in animation_list %}
+                            <option value="{{ anim }}" {% if anim == start_animation %} SELECTED{% endif %}>{{ anim }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">End Animation</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="select" name="endAnimation">
+                        {% for anim in animation_list %}
+                            <option value="{{ anim }}" {% if anim == end_animation %} SELECTED{% endif %}>{{ anim }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-lg-10">
                         <input type="submit" class="btn btn-primary btn-block" />

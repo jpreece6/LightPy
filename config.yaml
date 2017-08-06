@@ -1,17 +1,22 @@
-end_animation: {name: Wipe}
-geo: {api_key: !!python/unicode 'AIzaSyCyCLvLMJooiqM_FEeSQf8bAYaDmOEEMps', default_latitude: !!python/unicode '51.7457',
-  default_longitude: !!python/unicode '2.2178', enabled: !!python/unicode 'on', location: !!python/unicode 'Stroud
-    UK', time_zone: Europe/London}
+animations: {Bounce: null, BounceRand: null, Fade: null, FadeColours: null, FadeRand: null,
+  RandBuild: null, Random: null, Split: null, SplitRand: null, Wipe: null, WipeRand: null}
+end_animation: !!python/unicode 'Random'
+geo: {api_key: AIzaSyCyCLvLMJooiqM_FEeSQf8bAYaDmOEEMps, default_latitude: 51.7457,
+  default_longitude: 2.2178, enabled: false, location: Stroud UK, time_zone: Europe/London}
 motion: {timeout: 3}
-start_animation: {name: Fade}
+start_animation: !!python/unicode 'Random'
+animation_duration: 10
+animation_iterations: 1
 strip:
-  active_color: {B: 200, G: 40, R: 40}
-  brightness: 40
+  active_color: {B: 0, G: 100, R: 255}
+  brightness: 120
   channel: 0
-  count: !!python/unicode '31'
+  count: 12
   dma: 5
   frq: 800000
+  greater_than_time: !!python/unicode '20:30'
   invert: false
-  max_brightness: 180
-  night_brightness: !!python/unicode '22'
-  pin: !!python/unicode '18'
+  less_than_time: !!python/unicode '12:30'
+  max_brightness: 255
+  night_brightness: 120
+  pin: 18
