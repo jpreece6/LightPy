@@ -1,3 +1,5 @@
+animation_duration: 10
+animation_iterations: 1
 animations: {Bounce: null, BounceRand: null, Fade: null, FadeColours: null, FadeRand: null,
   RandBuild: null, Random: null, Split: null, SplitRand: null, Wipe: null, WipeRand: null}
 end_animation: !!python/unicode 'Random'
@@ -5,8 +7,6 @@ geo: {api_key: AIzaSyCyCLvLMJooiqM_FEeSQf8bAYaDmOEEMps, default_latitude: 51.745
   default_longitude: 2.2178, enabled: false, location: Stroud UK, time_zone: Europe/London}
 motion: {timeout: 3}
 start_animation: !!python/unicode 'Random'
-animation_duration: 10
-animation_iterations: 1
 strip:
   active_color: {B: 0, G: 100, R: 255}
   brightness: 120
@@ -16,7 +16,7 @@ strip:
   frq: 800000
   greater_than_time: !!python/unicode '20:30'
   invert: false
-  less_than_time: !!python/unicode '12:30'
+  less_than_time: !!python/unicode '14:30'
   max_brightness: 255
   night_brightness: 120
   pin: 18
