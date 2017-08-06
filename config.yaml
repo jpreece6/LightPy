@@ -9,7 +9,7 @@ motion: {timeout: 3}
 onTime: 90
 start_animation: !!python/unicode 'Random'
 strip:
-  active_color: {B: 255, G: 255, R: 255}
+  active_color: {B: 0, G: 97, R: 255}
   brightness: 255
   channel: 0
   count: 61
@@ -19,5 +19,5 @@ strip:
   invert: false
   less_than_time: !!python/unicode '06:30'
   max_brightness: 255
-  night_brightness: 255
+  night_brightness: 190
   pin: 18

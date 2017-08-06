@@ -3,7 +3,7 @@ import time
 import os
 import sys
 import ConfigReader
-
+import Log
 
 if __name__ == '__main__':
 
@@ -36,9 +36,12 @@ if __name__ == '__main__':
 			time.sleep(500/1000.0)
 	except Exception, e:
 		print str(e)
+		Log.Write(str(e))
 	finally:
 		h.Exit()
-		print ("Clean")
+		print ("Cleaned")
+		Log.Write('Closed')
+		Log.Save()
 		os._exit(0)
 		
 	

@@ -19,7 +19,7 @@ def index():
 @app.route('/update_settings', methods=['POST'])
 def update_settings():
     cfg = ConfigReader.GetConfig()
-    cfg['strip']['night_brightness'] = int(request.form['brightness'])
+    cfg['strip']['brightness'] = int(request.form['brightness'])
     cfg['strip']['less_than_time'] = request.form['onTime']
     cfg['strip']['greater_than_time'] = request.form['endTime']
 

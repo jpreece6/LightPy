@@ -6,6 +6,7 @@ from neopixel import *
 from blinker import signal
 from threading import Timer
 import random
+import Log
 
 class HardwareController:
 
@@ -17,6 +18,7 @@ class HardwareController:
             self.TimoutLatch = True
             self.LedController.Off()
             print "ON"
+	    Log.Write('ON')
             if (self.cfg['start_animation'] == 'Random'):
                 choice = random.choice(self.LedController.StartAnimations.keys())
             else:
@@ -29,16 +31,26 @@ class HardwareController:
 
     def AnimationComplete(self, sender):
         if (self.EndLatch == True):
-            self.LedController.Off()
+	    print "OFF"
+	    Log.Write("OFF")
+            self.Exit()
+	    self.EndLatch = False
+	    self.TimeoutLatch = False
 
         self.AnimationIsRunning = False
-        self.EndLatch = False
 
     def Update(self):
         detected = self.MotionSensor.ReadPin()
         if detected:
         	self.Triggered()
-		#print "Motion"
+	else:
+		now = time.time()
+		diff = now - self.LastMotion
+		if (diff >= (self.OnTime + 10)):
+			self.Exit()
+			self.AnimationRunning = False
+			self.EndLatch = False
+			self.TimeoutLatch = False
 
     def UpdateLatch(self):
         now = time.time()
@@ -46,16 +58,22 @@ class HardwareController:
 	    #print diff
         # Difference in seconds
         if (diff >= self.OnTime):
-            print "OFF"
-            if (self.cfg['end_animation'] == 'Random'):
-                choice = random.choice(self.LedController.EndAnimations.keys())
-            else:
-                choice = self.cfg['end_animation']
-            #print choice
-            self.LedController.EndAnimations[choice].Play()
-            self.TimoutLatch = False
-            self.EndLatch = True
-        else:
+        	if (self.EndLatch == False):
+			if (self.cfg['end_animation'] == 'Random'):
+        	        	choice = random.choice(self.LedController.EndAnimations.keys())
+		        else:
+        			choice = self.cfg['end_animation']
+	        	#print choice
+			self.LedController.EndAnimations[choice].Play()
+        		self.TimoutLatch = False
+	        	self.EndLatch = True
+		else:
+			if (diff >= (self.OnTime + 10)):
+				self.Exit()
+				self.EndLatch = False
+				self.TimeoutLatch = False
+        
+	else:
             self.TimoutTimer = Timer(self.cfg['motion']['timeout'], self.UpdateLatch, ())
             self.TimoutTimer.start()
 

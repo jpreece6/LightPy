@@ -55,8 +55,8 @@ class LedController:
         #self.StartAnimations['RandBuild'] = RandBuildAnimation(self.brightness, self.activeColor).BuildIn(self.strip, self.activeColor)
         self.StartAnimations['Split'] = SplitAnimation(self.brightness, self.activeColor).SplitIn(self.strip)
         self.StartAnimations['SplitRand'] = SplitAnimation(self.brightness, self.activeColor).SplitRandIn(self.strip)
-        self.StartAnimations['Bounce'] = BounceAnimation(self.brightness, self.activeColor).Bounce(self.strip)
-        self.StartAnimations['BounceRand'] = BounceAnimation(self.brightness, self.activeColor).BounceRand(self.strip)
+        #self.StartAnimations['Bounce'] = BounceAnimation(self.brightness, self.activeColor).Bounce(self.strip)
+        #self.StartAnimations['BounceRand'] = BounceAnimation(self.brightness, self.activeColor).BounceRand(self.strip)
 
         self.EndAnimations = {}
         self.EndAnimations['Fade'] = FadeAnimation(self.brightness, self.activeColor).FadeOut(self.strip)
