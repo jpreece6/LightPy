@@ -11,11 +11,21 @@ if __name__ == '__main__':
 	onTime = cfg['strip']['less_than_time']
 	endTime = cfg['strip']['greater_than_time']
 	h = HardwareModule.HardwareController()
+	startTime = time.time()
+	prevTime = startTime
 
 	try:
 
 		while 1:
 			nowTime = time.strftime('%H:%M')
+			startTime = time.time()
+
+			# update config every minute
+			if (startTime - prevTime > 60):
+				cfg = ConfigReader.GetConfig()
+				onTime = cfg['strip']['less_than_time']
+				endTime = cfg['strip']['greater_than_time']
+				prevTime = startTime
 
 			if (nowTime <= onTime):
 				h.Update()
